@@ -1,0 +1,43 @@
+graph = {
+    "WA":  ["NT", "SA"],
+    "NT":  ["WA", "SA", "Q"],
+    "SA":  ["WA", "NT", "Q", "NSW", "VIC"],
+    "Q":   ["NT", "SA", "NSW"],
+    "NSW": ["Q", "SA", "VIC"],
+    "VIC": ["SA", "NSW", "TAS"],
+    "TAS": ["VIC"]
+}
+colors = ["Red", "Green", "Blue"]
+def is_valid(region, color, assignment):
+    for neighbor in graph[region]:
+        if neighbor in assignment and assignment[neighbor] == color:
+            return False
+    return True
+def color_map(regions, assignment={}):
+    if len(assignment) == len(regions):
+        return assignment
+    region = regions[len(assignment)]
+    for color in colors:
+        if is_valid(region, color, assignment):
+            assignment[region] = color
+            solution = color_map(regions, assignment)
+            if solution:
+                return solution
+            del assignment[region]
+    return None
+regions = list(graph.keys())
+solution = color_map(regions)
+print("Map Coloring Solution:")
+for region, color in solution.items():
+    print(region, "→", color)
+#output
+Map Coloring Solution:
+WA → Red
+NT → Green
+SA → Blue
+Q → Red
+NSW → Green
+VIC → Red
+TAS → Green
+=== Code Execution Successful ===
+
